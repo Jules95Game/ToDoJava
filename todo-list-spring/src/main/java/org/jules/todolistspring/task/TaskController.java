@@ -26,7 +26,7 @@ public class TaskController {
         return taskRepository.findAll();
     }
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task newTask, UriComponentsBuilder ucb) {
         Task savedTask = taskRepository.save(newTask);
         URI location = ucb.path("task/{id}").buildAndExpand(savedTask.getId()).toUri();
