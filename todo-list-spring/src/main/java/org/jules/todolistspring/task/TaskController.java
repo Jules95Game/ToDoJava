@@ -2,10 +2,10 @@ package org.jules.todolistspring.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,5 +22,12 @@ public class TaskController {
     @GetMapping
     public List<Task> findAll() {
         return taskRepository.findAll();
+    }
+
+    @PutMapping
+    public ResponseEntity<Task> createTask(@RequestBody Task newTask, UriComponentsBuilder ucb) {
+        Task savedTask = taskRepository.save(newTask);
+        URI location = ucb.path("task/{id}").buildAndExpand(savedTask.getId()).toUri();
+        return ResponseEntity.created(location).body(savedTask);
     }
 }
